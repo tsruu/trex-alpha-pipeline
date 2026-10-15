@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "scripts": {
+    "trexsim": "node scripts/trexsim-run.js",
+    "research:summary": "node scripts/trexsim-research-summary.js",
+    "research:campaign": "node scripts/trexsim-research-campaign.js",
+    "research:validate": "node scripts/trexsim-research-manifest.js fast",
+    "research:test": "node scripts/test-trexsim-expression-safety.js && node scripts/test-trexsim-research-state.js && node scripts/test-trexsim-api-batch.js && node scripts/test-trexsim-fast-triage.js",
+    "factory:refresh": "node scripts/trexsim-refresh-factory-context.js",
+    "factory:validate": "node scripts/trexsim-validate-factory-context.js",
+    "factory:check-duplicate": "node scripts/trexsim-check-factory-duplicate.js",
+    "research:triage": "python3 scripts/trexsim-fast-triage.py",
+    "search:pilot": "node scripts/trexsim-search.js --pilot 300 --tag pilot1",
+    "search:report": "node scripts/trexsim-search.js --report",
+    "search:analyze": "node scripts/trexsim-search.js --analyze --tag pilot1",
+    "search:stop": "touch alphas/search/STOP",
+    "search:run": "node scripts/trexsim-search.js --tag run1"
+  },
+  "dependencies": {
+    "playwright": "^1.57.0"
+  }
+}

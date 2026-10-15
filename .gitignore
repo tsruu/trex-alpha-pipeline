@@ -1,0 +1,23 @@
+.env
+.trexsim-browser/
+.trexsim-runner.lock
+node_modules/
+alphas/research/logs/
+
+# composites tooling
+alphas/composites/cookies.pkl
+alphas/validation/*.tmp
+alphas/validation/STOP-WORKER
+.trexsim-submit.lock
+.trexsim-submit.stamp
+alphas/validation/inbox/
+alphas/composites/STOP-CYCLE
+
+# server deployment
+logs/
+alphas/search/STOP
+alphas/composites/library.pkl
+.DS_Store
+__pycache__/
+.venv/
+alphas/validation/notified.json

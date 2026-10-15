@@ -1,0 +1,11 @@
+[Unit]
+Description=Commit run data and push to GitHub
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=@USER@
+WorkingDirectory=@DIR@
+Environment=TZ=Asia/Kolkata
+ExecStart=/bin/bash deploy/sync.sh

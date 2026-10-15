@@ -1,0 +1,19 @@
+[Unit]
+Description=TrexSim queue worker: composites, search keepers, mined components (6 Slow + 2 Fast in flight)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=@USER@
+WorkingDirectory=@DIR@
+Environment=TZ=Asia/Kolkata
+ExecStart=/usr/bin/node scripts/composites/sim-queue-worker.js --slow 6 --fast 2
+# Exits 0 on alphas/validation/STOP-WORKER (no restart); restarts after crashes.
+# Jobs left 'submitted' are resumed by id on restart.
+Restart=on-failure
+RestartSec=60
+StandardOutput=append:@DIR@/logs/worker.log
+StandardError=append:@DIR@/logs/worker.log
+
+[Install]
+WantedBy=multi-user.target

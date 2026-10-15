@@ -1,0 +1,299 @@
+{
+    "items": [
+        {
+            "oper_name": "at_nan2zero(A)",
+            "oper_snippet": "at_nan2zero(${1:A})",
+            "oper_id": "at_nan2zeroa",
+            "oper_desc": "Replace nonfinite values to zeros",
+            "oper_scope": "builtin",
+            "oper_example": "at_nan2zero(close)",
+            "oper_full_desc": "Replace nonfinite values to zeros\n\nReturns in place `np.nan_to_num(a)`, replacing `np.nan` and `np.inf` with zeros.\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nUseful when adding two alphas to ensure nan values do not turn finite values into nans and cause loss of data. Also useful when slowing down sparse variables (taking the mean of nans gives nans)\n\n**Example**\n```\n>>> input  = [[2, 3, np.nan, 3, np.inf],\n              [3, 0,      4, 5,     -2]]\n>>> at_nan2zero(input)\n[[2, 3, 0, 3, 0],\n [3, 0, 4, 5, -2]]\n```"
+        },
+        {
+            "oper_name": "at_signlog(A)",
+            "oper_snippet": "at_signlog(${1:A})",
+            "oper_id": "at_signloga",
+            "oper_desc": "Sign-preserving log1p transformation",
+            "oper_scope": "builtin",
+            "oper_example": "at_signlog(close)",
+            "oper_full_desc": "Sign-preserving log1p transformation\n\nReturns in place `np.sign(a) * np.log1p(np.abs(input))`\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nlog1p(x) is equivalent to log(1+p). One is added so that zero maps to zero (log1p(0) = 0). Useful when taking logarithm of data that may contain both positive and negative values.\n\n**Example**\n```\n>>> input  = [[2, 3, np.nan, 3, np.inf],\n              [3, 0,      4, 5,     -2]]\n>>> at_signlog(input)\n[[ 1.0986, 1.3863, np.nan, 1.3863, np.nan],\n [ 1.3863,      0, 1.6094, 1.7918,-1.0986]]\n```"
+        },
+        {
+            "oper_name": "at_signsqrt(A)",
+            "oper_snippet": "at_signsqrt(${1:A})",
+            "oper_id": "at_signsqrta",
+            "oper_desc": "Sign-preserving sqrt transformation",
+            "oper_scope": "builtin",
+            "oper_example": "at_signsqrt(close)",
+            "oper_full_desc": "Sign-preserving sqrt transformation\n\nReturns in place `np.sign(a) * np.sqrt(np.abs(input)+1)`\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Example**\n```\n>>> input  = [[2, 3, np.nan, 3, np.inf],\n              [3, 0,      4, 5,     -2]]\n>>> at_signsqrt(input)\n[[1.7321, 2.0000, np.nan, 2.0000,  np.nan]\n [2.0000,      0, 2.2361, 2.4495, -1.7321]]\n```"
+        },
+        {
+            "oper_name": "at_zero2nan(A)",
+            "oper_snippet": "at_zero2nan(${1:A})",
+            "oper_id": "at_zero2nana",
+            "oper_desc": "Replace zeros to nans",
+            "oper_scope": "builtin",
+            "oper_example": "at_zero2nan(close)",
+            "oper_full_desc": "Replace zeros to nans\n\nReturns `a[a==0] = np.nan`, replacing zeros with np.nan.\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nUseful when you want to take a mean of non-zero values only, using nanmean, for example.\n\n**Example**\n```\n>>> input  = [[2, 3, np.nan, 3, np.inf],\n              [3, 0,      4, 5,     -2]]\n>>> at_zero2nan(input)\n[[2,      3, np.nan, 3, np.inf],\n [3, np.nan,      4, 5,     -2]]\n```"
+        },
+        {
+            "oper_name": "cs_booksize(input, booksize)",
+            "oper_snippet": "cs_booksize(${1:input}, ${2: booksize})",
+            "oper_id": "cs_booksize-input-booksize",
+            "oper_desc": "Normalize positions of input portfolio such that the sum of all positive and negative positions sum to the same number everyday",
+            "oper_scope": "builtin",
+            "oper_example": "cs_booksize(close, 1)",
+            "oper_full_desc": "Normalize positions of input portfolio such that the sum of all positive and negative positions sum to the same number everyday\n\n**Parameters**:\n- `input: ndarray, shape (n, d)`\n- `booksize: target booksize of long and short book, scalar`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nIn case the original alpha has all negative or all positive values, the output portfolio will be unbalanced with 0 booksize on the side that didn't have any values in the input\n\n**Example**\n```\n>>>alpha = cs_booksize(-ret1,1e6)\n```"
+        },
+        {
+            "oper_name": "cs_factorneut(input,[factor1,factor2],int_factors=[int_factor1,int_factor2])",
+            "oper_snippet": "cs_factorneut(${1:input}, ${2:[factor1}, ${3:factor2]}, ${4:int_factors=[int_factor1}, ${5:int_factor2]})",
+            "oper_id": "cs_factorneut-input",
+            "oper_desc": "Neutralize the input variable to style factors (e.g. size, value, momentum)",
+            "oper_scope": "builtin",
+            "oper_example": "cs_factorneut(close, [factor1, factor2], int_factors=[factor1, factor2])",
+            "oper_full_desc": "Neutralize the input variable to style factors (e.g. size, value, momentum)\n\n**Parameters**:\n- `input: ndarray, shape (n, d)`\n- `factor1,factor2,etc: analog value factors (e.g. barra_momentum) against which to neutralize the signal, ndarray, shape (n,d)`\n- `int_factor1,int_factor2,etc: integer value factors (e.g. industry) against which to neutralize the signal, ndarray, shape (n,d)`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nThis operator will compute and return everyday the portion of the input data variable that is orthogonal to all of the factors passed.\n\n**Example**\n```\n>>>alpha = cs_factorneut(-ret1,[barra_size,barra_momentum,barra_beta,barra_value],int_factors=[industry])\n```"
+        },
+        {
+            "oper_name": "cs_harmonic_mean(A)",
+            "oper_snippet": "cs_harmonic_mean(${1:A})",
+            "oper_id": "cs_harmonic_meana",
+            "oper_desc": "Compute harmonic mean across all stocks every day",
+            "oper_scope": "builtin",
+            "oper_example": "cs_harmonic_mean(close)",
+            "oper_full_desc": "Compute harmonic mean across all stocks every day\n\nCompute the cross-sectional harmonic mean each day: `A[:,day] = 1 / np.nanmean(1 / A[:,day])`.\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nHarmonic mean is equivalent to the reciprocal of the arithmetic mean of the reciprocals of the values. This harmonic mean is copied to all elements in the column. The output will therefore have the same values for all stocks on each day, and will need to be modified further to produce a signal. For example, cs_harmonic_mean(input) - ts_harmonic_mean(input,10).\n\n**Example**\n```\n>>>input  = [[1,   3,      2,   3,   4],\n             [3,   0, np.nan,   5,  -2]]\n>>>cs_harmonic_mean(input)\n[[1.5,  0,   2,   3.75,  -8],\n [1.5,  0,   2,   3.75,  -8]]\n```"
+        },
+        {
+            "oper_name": "cs_indneut(input, grouping)",
+            "oper_snippet": "cs_indneut(${1:input}, ${2: grouping})",
+            "oper_id": "cs_indneut-input-grouping",
+            "oper_desc": "Returns a neutralized version of input data variable to grouping data variable.",
+            "oper_scope": "builtin",
+            "oper_example": "cs_indneut(close, factor1)",
+            "oper_full_desc": "Returns a neutralized version of input data variable to grouping data variable.\n\n**Parameters**:\n- `input: ndarray, shape (n, d)`\n- `grouping: grouping data variable (e.g. industry or subindustry, integer values are expected), ndarray, shape (n,d)`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nThis operator will compute and subtract out the group mean value each day for each group. This will return an transformed version of the input data variable that will be neutralized to the grouping variable.\n\n**Example**\n```\n>>>alpha = cs_indneut(-ret1,industry)\n```"
+        },
+        {
+            "oper_name": "cs_poslimit(input, pos_limit)",
+            "oper_snippet": "cs_poslimit(${1:input}, ${2: pos_limit})",
+            "oper_id": "cs_poslimit-input-pos_limit",
+            "oper_desc": "This operator places an upper bound on the limit of the portfolio that can be allocated to any single stock",
+            "oper_scope": "builtin",
+            "oper_example": "cs_poslimit(close, 0.1)",
+            "oper_full_desc": "This operator places an upper bound on the limit of the portfolio that can be allocated to any single stock\n\n**Parameters**:\n- `input: ndarray, shape (n, d)`\n- `pos_limit: how much can be allocated to a single stock, scalar (between 0-1)`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nSimply computes booksize of portfolio on that day and then thresholds stock positions to below pos_limit * portfolio booksize\n\n**Example**\n```\n>>>alpha = cs_poslimit(-ret1,0.01)\n```"
+        },
+        {
+            "oper_name": "cs_rank(A)",
+            "oper_snippet": "cs_rank(${1:A})",
+            "oper_id": "cs_ranka",
+            "oper_desc": "Assign rank to stock values every day",
+            "oper_scope": "builtin",
+            "oper_example": "cs_rank(close)",
+            "oper_full_desc": "Assign rank to stock values every day\n\nCompute ranks and scale uniformly between 1 and 2 for convenience\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nUseful when you want to isolate a certain fraction of all the data, for example `(cs_rank(ret1)>1.9)` is a matrix of 1's for the top 10% of stocks each day, when sorted by ret1.\n\nThis method is an efficient way of doing `A[:,day] = scipy.stats.rankdata(A[:,day], 'dense')` and scaling the result to be between 1 and 2 each day.\n\n**Example**\n```\n>>>input  = [[ 2,   3, np.nan,      3, np.inf],\n              [3,   0,      4,      5,     -2],\n              [4,   1, np.nan, np.nan,      1]]\n>>>cs_rank(input)\n[[1.0000, 2.0000, np.nan, 1.0000, np.nan],\n [1.5000, 1.0000, 1.5000, 2.0000, 1.0000],\n [2.0000, 1.5000, np.nan, np.nan, 2.0000]]\n```"
+        },
+        {
+            "oper_name": "cs_remove_middle(A, filter_percentile)",
+            "oper_snippet": "cs_remove_middle(${1:A}, ${2: filter_percentile})",
+            "oper_id": "cs_remove_middlea-filter_percentile",
+            "oper_desc": "Keep only the extreme cross-sectional values by removing the middle values",
+            "oper_scope": "builtin",
+            "oper_example": "cs_remove_middle(close, 0.5)",
+            "oper_full_desc": "Keep only the extreme cross-sectional values by removing the middle values\n\nRemove the `filter_percentile` of middle values among stocks each day\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `filter_percentile: float in [0,1)`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nSometimes the extreme values in an alpha will have stronger predictive power than the middle values, so trading only on the tails of values can produce higher returns but at the cost of higher turnover and higher volatility of pnl.\n\nFor example, filter_percentile = 0.80 means we will remove the middle 80% of the data and keep 10% of each tail.\n\n**Example**\n```\n>>>input = [0.81,\n            0.91,\n            0.13,\n            0.91,\n            0.63,\n            0.10,\n            0.28]\n>>>cs_remove_middle(input, 0.5)\n[np.nan,\n np.nan,\n np.nan,\n 0.91,\n np.nan,\n 0.10,\n np.nan]\n```"
+        },
+        {
+            "oper_name": "cs_scale(A)",
+            "oper_snippet": "cs_scale(${1:A})",
+            "oper_id": "cs_scalea",
+            "oper_desc": "Scale the data between 1 and 2",
+            "oper_scope": "builtin",
+            "oper_example": "cs_scale(close)",
+            "oper_full_desc": "Scale the data between 1 and 2\n\nApplies min-max scaling to the data each day and scale to 1 and 2: `A[:,day] = 1 + (A[:,day] - np.nanmin(A[:,day])) / (np.nanmax(A[:,day]) - np.nanmin(A[:,day]))`.\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nUseful when adding two data sets of different magnitudes, return and volume, for example. Apply to both to rescale but preserve relative magnitudes inside each variable.\n\nDifferent from cs_rank in that it'll preserve relative distances between values\n\n**Example**\n```\n>>>input  = [[ 2,   3, np.nan,      3, np.inf],\n              [3,   0,      4,      5,     -2],\n              [4,   1, np.nan, np.nan,      1]]\n>>>cs_scale(input)\n[[1.0000, 2.0000, np.nan, 1.0000, np.nan],\n [1.5000, 1.0000, 1.5000, 2.0000, 1.0000],\n [2.0000, 1.3333, np.nan, np.nan, 2.0000]]\n```"
+        },
+        {
+            "oper_name": "cs_shrink_balance(input)",
+            "oper_snippet": "cs_shrink_balance(${1:input})",
+            "oper_id": "cs_shrink_balance-input",
+            "oper_desc": "Compute and compare the sum of all long positions to the sum of all short positions in a portfolio everyday. Shrink the size of the larger book such that it equals the smaller book size so that the portfolio is balanced.",
+            "oper_scope": "builtin",
+            "oper_example": "cs_shrink_balance(close)",
+            "oper_full_desc": "Compute and compare the sum of all long positions to the sum of all short positions in a portfolio everyday. Shrink the size of the larger book such that it equals the smaller book size so that the portfolio is balanced.\n\n**Parameters**:\n- `input: ndarray, shape (n, d)`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nGenerally used in place of cs_booksize to ensure a balanced portfolio without violating constraints applied previously (i.e. volume constraints or locates)\n\n**Example**\n```\n>>>alpha = cs_shrink_balance(-ret1)\n```"
+        },
+        {
+            "oper_name": "cs_winsor(A, filter_percentile, remove_extreme)",
+            "oper_snippet": "cs_winsor(${1:A}, ${2: filter_percentile}, ${3: remove_extreme})",
+            "oper_id": "cs_winsora-filter_percentile-remove_extreme",
+            "oper_desc": "Winsorizes or removes extreme values",
+            "oper_scope": "builtin",
+            "oper_example": "cs_winsor(close, 0.5, True)",
+            "oper_full_desc": "Winsorizes or removes extreme values\n\nSets extreme values to `filter_percentile` values or zeros\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `filter_percentile: float in [0,1)`\n- `remove_extreme: boolean`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nUseful when dealing with outliers. For example, ret1 data has many extreme outlier values that may be difficult to predict.\n\nSee https://en.wikipedia.org/wiki/Winsorizing.\n\n**Example**\n```\n>>>input  = [[ 2,   3, np.nan,      3, np.inf],\n              [3,   0,      4,      5,     -2],\n              [4,   1, np.nan, np.nan,      1]]\n>>>cs_winsor(input,0.35,remove_extreme=False)\n[[3,   1, np.nan,      3,np.nan],\n [3,   1,      4,      5,    -2],\n [3,   1, np.nan, np.nan,     1]]\n```"
+        },
+        {
+            "oper_name": "cs_zscore(A)",
+            "oper_snippet": "cs_zscore(${1:A})",
+            "oper_id": "cs_zscorea",
+            "oper_desc": "Normalize the data by centering and standardizing",
+            "oper_scope": "builtin",
+            "oper_example": "cs_zscore(close)",
+            "oper_full_desc": "Normalize the data by centering and standardizing\n\nComputes the z-score of each stock data each day: `A[:,day] = (A[:,day] - np.nanmean(A[:,day])) / np.nanstd(A[:,day])`.\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nApart from calculating z-scores, the operator can be used when adding two data sets of different magnitudes, return and volume, for example. Apply to both to rescale while preserving relative magnitudes inside each variable.\n\n**Example**\n```\n>>>input  = [[ 2,   3, np.nan,      3, np.inf],\n              [3,   0,      4,      5,     -2],\n              [4,   1, np.nan, np.nan,      1]]\n>>>cs_zscore(input)\n[[ -1.2247,  1.3363,  np.nan, -1.0000,  np.nan],\n [       0, -1.0690,  np.nan,  1.0000,  np.nan],\n [  1.2247, -0.2673,  np.nan,  np.nan,  np.nan]]\n```"
+        },
+        {
+            "oper_name": "ts_corr_binary(A, B, days)",
+            "oper_snippet": "ts_corr_binary(${1:A}, ${2: B}, ${3: days})",
+            "oper_id": "ts_corr_binarya-b-days",
+            "oper_desc": "Computes stock level correlation between two data variables",
+            "oper_scope": "builtin",
+            "oper_example": "ts_corr_binary(close, factor1, 10)",
+            "oper_full_desc": "Computes stock level correlation between two data variables\n\nComputes correlation between two data variables in the past `days` time points for each stock.\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `B: ndarray, shape (n, d)`\n- `days: int`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nCorrelation can be used to calculate beta between stock and market returns using `close_SPX` variable, which is the S&P500 close price.\n\n**Example**\n```\n>>>input_1 = [[ 1,   3,   2,   3,   4],\n              [ 3,   0,   4,   5,  -2]]\n>>>input_2 = [[ 2,   3,   3,   4,   3],\n              [ 2,   1,   5,   4,  -2]]\n>>>ts_corr_binary(input_1,input_2,3)\n[[np.nan, np.nan, 0.8660, 0.5000,      0],\n [np.nan, np.nan, 0.8462, 0.9078, 0.9651]]\n```"
+        },
+        {
+            "oper_name": "ts_delay(A, days)",
+            "oper_snippet": "ts_delay(${1:A}, ${2: days})",
+            "oper_id": "ts_delaya-days",
+            "oper_desc": "Sets value today to the value `days` ago.",
+            "oper_scope": "builtin",
+            "oper_example": "ts_delay(close, 10)",
+            "oper_full_desc": "Sets value today to the value `days` ago.\n\nSet each `A[:,day]` to `A[:,day-days]`. i.e. rolls the matrix along the time dimension: `np.roll(A,days,1)`\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `days: int`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nUseful when comparing past data to present data.\n\nThe days without appropriate past data `A[:, :days]` is set to `np.nan`\n\n**Example**\n```\n>>>input = [[ 1,   3,   2,   3,   4],\n            [ 3,   0,   4,   5,  -2]]\n>>>ts_delay(input,2)\n[[np.nan, np.nan,   1,   3,   2],\n [np.nan, np.nan,   3,   0,   4]]\n```"
+        },
+        {
+            "oper_name": "ts_diff(A, n)",
+            "oper_snippet": "ts_diff(${1:A}, ${2: n})",
+            "oper_id": "ts_diffa-n",
+            "oper_desc": "Computes the `n`-th discrete difference along the time dimension",
+            "oper_scope": "builtin",
+            "oper_example": "ts_diff(close, 10)",
+            "oper_full_desc": "Computes the `n`-th discrete difference along the time dimension\n\nThe first difference is given by `out[n] = A[n+1] - A[n]` along the time axis, higher differences are calculated by using diff recursively e.g. `ts_diff(input,2) = ts_diff(ts_diff(input,1),1)`.\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `n: int`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nUseful when you want to slow or accelerate the trading of an alpha, ret5 = ts_delay(ret5,1) + ts_diff(ret5,1).\n\n**Example**\n```\n>>>input = [[ 1,   3,   2,   3,   4],\n            [ 3,   0,   4,   5,  -2]]\n>>>ts_diff(input,1)\n[[np.nan,  2,  -1,  1,  1],\n [np.nan, -3,   4,  1, -7]]\n```"
+        },
+        {
+            "oper_name": "ts_fill(A)",
+            "oper_snippet": "ts_fill(${1:A})",
+            "oper_id": "ts_filla",
+            "oper_desc": "Forward fill the data",
+            "oper_scope": "builtin",
+            "oper_example": "ts_fill(close)",
+            "oper_full_desc": "Forward fill the data\n\nIterate through all days and replace nans today with previous day's values\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nUseful when dealing with sparse data.\n\nFor example, quarterly earnings data may have a new entry every 63 days. `ts_fill` allows you to populate the matrix with constant values of most recent earnings release.\n\n**Example**\n```\n>>>input  = [[ 2,   3, np.nan,      3, np.inf],\n              [3,   0,      4,      5,     -2],\n              [4,   1, np.nan, np.nan,      1]]\n>>>ts_fill(input)\n[[2,   3,   3,   3, np.inf],\n [3,   0,   4,   5,     -2],\n [4,   1,   1,   1,      1]]\n```"
+        },
+        {
+            "oper_name": "ts_harmonic_mean(A, days)",
+            "oper_snippet": "ts_harmonic_mean(${1:A}, ${2: days})",
+            "oper_id": "ts_harmonic_meana-days",
+            "oper_desc": "Harmonic mean of the data in the last `days`",
+            "oper_scope": "builtin",
+            "oper_example": "ts_harmonic_mean(close, 10)",
+            "oper_full_desc": "Harmonic mean of the data in the last `days`\n\nCompute the harmonic mean in the past `days` each day\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `days: int`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nUseful when dealing with outliers or ratios.\n\n**Example**\n```\n>>>input  = [[ 2,   3, np.nan,      3, np.inf],\n              [3,   0,      4,      5,     -2],\n              [4,   1, np.nan, np.nan,      1]]\n>>>ts_harmonic_mean(input)\n[[np.nan,   2.400,  3.429,  2.667, 1.333],\n [np.nan,   3.429, np.nan, np.nan, 4.000],\n [np.nan,   1.600, np.inf, -3.000, 3.429]]\n```"
+        },
+        {
+            "oper_name": "ts_max(A, days)",
+            "oper_snippet": "ts_max(${1:A}, ${2: days})",
+            "oper_id": "ts_maxa-days",
+            "oper_desc": "Maximum in the past `days`",
+            "oper_scope": "builtin",
+            "oper_example": "ts_max(close, 10)",
+            "oper_full_desc": "Maximum in the past `days`\n\nCompute the maximum value in the past `days` each day\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `days: int`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Example**\n```\n>>>input  = [[ 2,   3, np.nan,      3, np.inf],\n              [3,   0,      4,      5,     -2],\n              [4,   1, np.nan, np.nan,      1]]\n>>>ts_max(input, 2)\n[[ 2,   3, np.nan,      3, np.inf],\n [ 3,   3,      4,      5,      5],\n [ 4,   4, np.nan, np.nan,      1]]\n```"
+        },
+        {
+            "oper_name": "ts_mean(A, days)",
+            "oper_snippet": "ts_mean(${1:A}, ${2: days})",
+            "oper_id": "ts_meana-days",
+            "oper_desc": "Mean in the past `days`",
+            "oper_scope": "builtin",
+            "oper_example": "ts_mean(close, 10)",
+            "oper_full_desc": "Mean in the past `days`\n\nCompute the mean value in the past `days` each day\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `days: int`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nThe most straightforward way to slow trading of a signal is to apply a simple moving average.\n\nAnother way to think about `ts_mean(A, days)` is holding onto a position for `days`.\n\n**Example**\n```\n>>>input  = [[ 2,   3, np.nan,      3, np.inf],\n              [3,   0,      4,      5,     -2],\n              [4,   1, np.nan, np.nan,      1]]\n>>>ts_mean(input, 2)\n[[ np.nan, 2.5000, np.nan, 3.0000, np.nan],\n [ np.nan, 1.5000, 2.0000, 4.5000, 1.5000],\n [ np.nan, 2.5000, np.nan, np.nan, 1.0000]]\n```"
+        },
+        {
+            "oper_name": "ts_mean_exp(A, days, exp_factor)",
+            "oper_snippet": "ts_mean_exp(${1:A}, ${2: days}, ${3: exp_factor})",
+            "oper_id": "ts_mean_expa-days-exp_factor",
+            "oper_desc": "Exponentially weighted average in the past `days` with `exp_factor`",
+            "oper_scope": "builtin",
+            "oper_example": "ts_mean_exp(close, 10, -1)",
+            "oper_full_desc": "Exponentially weighted average in the past `days`\n\nCompute the exponentially weighted average value in the past `days` each day\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `days: int`\n- `exp_factor: float in (0,1)`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\n`exp_factor` of 0.1 is like dividing the change each day by 10: `a[n] = 0.1 * (a[n] - a[n-1]) + a[n-1]`.\n\nIt usually takes about `2 / exp_factor` days for a change to dissipate. As such, `exp_factor` should be set to about `2 / days`.\n\nCommon combinations are: `ts_mean_exp(A, 20, 0.1)`, `ts_mean_exp(A, 10, 0.2)`, and `ts_mean_exp(A, 5, 0.4)`.\n\n**Example**\n```\n>>>input  = [[ 2,   3, np.nan,      3, np.inf],\n              [3,   0,      4,      5,     -2],\n              [4,   1, np.nan, np.nan,      1]]\n>>>ts_mean(input, 3, 0.2)\n[[ 2.0000,  2.5556,  np.nan,  3.0000,  np.nan],\n [ 3.0000,  1.3333,  2.4262,  3.3607,  1.8689],\n [ 4.0000,  2.3333,  np.nan,  np.nan,  1.0000]]\n```"
+        },
+        {
+            "oper_name": "ts_median(A, days)",
+            "oper_snippet": "ts_median(${1:A}, ${2: days})",
+            "oper_id": "ts_mediana-days",
+            "oper_desc": "Nanmedian of values in the past `days`",
+            "oper_scope": "builtin",
+            "oper_example": "ts_median(close, 10)",
+            "oper_full_desc": "Nanmedian of values in the past `days`\n\nCompute the median in the past `days` each day, ignoring nans\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `days: int`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**\n\nMedian is less sensitive to outliers than mean\n\n**Example**\n```\n>>>input  = [[ 1, 2, 3,      4],\n             [ 4, 5, 6, np.nan]]\n>>>ts_median(input, 2)\n[[ np.nan,  1.5000,  2.5000,  3.5000],\n [ np.nan,  4.5000,  5.5000,  np.nan]]\n```"
+        },
+        {
+            "oper_name": "ts_min(A, days)",
+            "oper_snippet": "ts_min(${1:A}, ${2: days})",
+            "oper_id": "ts_mina-days",
+            "oper_desc": "Nanmin of values in the past `days`",
+            "oper_scope": "builtin",
+            "oper_example": "ts_min(close, 10)",
+            "oper_full_desc": "Nanmin of values in the past `days`\n\nCompute the min in the past `days` each day, ignoring nans\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `days: int`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Example**\n```\n>>>input  = [[ 1, 2, 3,      4],\n             [ 4, 5, 6, np.nan]]\n>>>ts_min(input, 3)\n[[ 1, 1, 1,      2],\n [ 4, 4, 4, np.nan]]\n```"
+        },
+        {
+            "oper_name": "ts_norm(A, days)",
+            "oper_snippet": "ts_norm(${1:A}, ${2: days})",
+            "oper_id": "ts_norma-days",
+            "oper_desc": "Center data with the average value in the past `days`",
+            "oper_scope": "builtin",
+            "oper_example": "ts_norm(close, 10)",
+            "oper_full_desc": "Center data with the average value in the past `days`\n\nScales the data by dividing by the average value: `A[:,day] /= np.nanmean(A[:,day-days:day])`\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `days: int`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Example**\n```\n>>>input = [[ 1,   3,   2,   3,   4],\n            [ 3,   0,   4,   5,  -2]]\n>>>ts_norm(input,3)\n[[np.nan, np.nan, 1.0000, 0.3750,  0.5556],\n [np.nan, np.nan, 0.5714, 0.5556, -0.2857]]\n```"
+        },
+        {
+            "oper_name": "ts_rank(A, days)",
+            "oper_snippet": "ts_rank(${1:A}, ${2: days})",
+            "oper_id": "ts_ranka-days",
+            "oper_desc": "Assign rank to today's value within past `days`",
+            "oper_scope": "builtin",
+            "oper_example": "ts_rank(close, 10)",
+            "oper_full_desc": "Assign rank to today's value within past `days`\n\nCompute ranks across the time series and scale uniformly between 1 and 2 for convenience\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `days: int`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Example**\n```\n>>>input  = [[ 1, 2, 3,      4],\n             [ 4, 5, 6, np.nan]]\n>>>ts_rank(input, 3)\n[[ 1.500, 2.000, 2.000,  2.000],\n [ 1.500, 2.000, 2.000, np.nan]]\n```"
+        },
+        {
+            "oper_name": "ts_skew(A, days)",
+            "oper_snippet": "ts_skew(${1:A}, ${2: days})",
+            "oper_id": "ts_skewa-days",
+            "oper_desc": "Compute the skewness of the finite values in the last `days`",
+            "oper_scope": "builtin",
+            "oper_example": "ts_skew(close, 10)",
+            "oper_full_desc": "Compute the skewness of the finite values in the last `days`\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `days: int`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Example**\n```\n>>>input  = [[ 1, 2, 2, 3],\n             [ 2, 3, 3, 2]]\n>>>ts_skew(input, 3)\n[[ np.nan, np.nan, -0.7071,  0.7071],\n [ np.nan, np.nan, -0.7071, -0.7071]]\n```"
+        },
+        {
+            "oper_name": "ts_std(A, days)",
+            "oper_snippet": "ts_std(${1:A}, ${2: days})",
+            "oper_id": "ts_stda-days",
+            "oper_desc": "Compute the standard deviation of the finite values in the last `days`",
+            "oper_scope": "builtin",
+            "oper_example": "ts_std(close, 10)",
+            "oper_full_desc": "Compute the standard deviation of the finite values in the last `days`\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `days: int`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Example**\n```\n>>>input  = [[ 1, 3,      2, 3,  4],\n             [ 3, 0, np.nan, 5, -2]]\n>>>ts_std(input, 3)\n[[ np.nan, np.nan, 1.0000, 0.5774, 1.0000],\n [ np.nan, np.nan, np.nan, 3.5355, 4.9497]]\n```"
+        },
+        {
+            "oper_name": "ts_std_normalized(A, days)",
+            "oper_snippet": "ts_std_normalized(${1:A}, ${2: days})",
+            "oper_id": "ts_std_normalizeda-days",
+            "oper_desc": "Standardize today's values",
+            "oper_scope": "builtin",
+            "oper_example": "ts_std_normalized(close, 10)",
+            "oper_full_desc": "Standardize today's values\n\nDivides today's value by the standard deviation of the finite values in the last `days`\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `days: int`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Example**\n```\n>>>input  = [[ 1, 3,      2, 3,  4],\n             [ 3, 0, np.nan, 5, -2]]\n>>>ts_std_normalized(input, 3)\n[[ np.nan, np.nan, 2.0000, 5.1962,  4.0000],\n [ np.nan, np.nan, np.nan, 1.4142, -0.4041]]\n```"
+        },
+        {
+            "oper_name": "ts_sum(A, days)",
+            "oper_snippet": "ts_sum(${1:A}, ${2: days})",
+            "oper_id": "ts_suma-days",
+            "oper_desc": "Cumulative sum in the past `days`",
+            "oper_scope": "builtin",
+            "oper_example": "ts_sum(close, 10)",
+            "oper_full_desc": "Cumulative sum in the past `days`\n\nCompute the sum of all finite values in the past `days`\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `days: int`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Notes**:\n\nUseful when accumulating signals. Nans are converted into zeros.\n\n**Example**\n```\n>>>input  = [[ 1, 3,      2, 3,  4],\n             [ 3, 0, np.nan, 5, -2]]\n>>>ts_sum(input, 3)\n[[ 1, 4, 6, 8, 9],\n [ 3, 3, 3, 5, 3]]\n```"
+        },
+        {
+            "oper_name": "ts_zscore(A, days)",
+            "oper_snippet": "ts_zscore(${1:A}, ${2: days})",
+            "oper_id": "ts_zscorea-days",
+            "oper_desc": "Normalize today's values by centering and standardizing",
+            "oper_scope": "builtin",
+            "oper_example": "ts_zscore(close, 10)",
+            "oper_full_desc": "Normalize today's values by centering and standardizing\n\n**Parameters**:\n- `A: ndarray, shape (n, d)`\n- `days: int`\n\n**Returns**:\n- `V: ndarray, shape (n, d)`\n\n**Example**\n```\n>>>input  = [[ 0.6557, 0.8491, 0.6787, 0.7431, 0.6555],\n             [ 0.0357, 0.9340, 0.7577, 0.3922, 0.1712]]\n>>>ts_zscore(input, 3)\n[[ np.nan, np.nan, np.nan,  0.1322, -0.8782],\n [ np.nan, np.nan, np.nan, -0.3448, -1.1361]]\n```"
+        }
+    ],
+    "pagination": {
+        "page": 1,
+        "num_pages": 1,
+        "items_per_page": 32,
+        "total_count": 32
+    },
+    "is_competition": true
+}

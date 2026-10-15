@@ -1,0 +1,21 @@
+[Unit]
+Description=TrexSim formula search (Fast only; keepers are Slow-run by the worker via trex-cycle)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=@USER@
+WorkingDirectory=@DIR@
+Environment=TZ=Asia/Kolkata TREXSIM_HEADLESS=1
+ExecStart=/usr/bin/node scripts/trexsim-search.js --tag run1
+# The search releases its runner lock on SIGINT, not SIGTERM.
+KillSignal=SIGINT
+TimeoutStopSec=90
+# Exits 0 on alphas/search/STOP (no restart); restarts after crashes.
+Restart=on-failure
+RestartSec=60
+StandardOutput=append:@DIR@/logs/search.out
+StandardError=append:@DIR@/logs/search.out
+
+[Install]
+WantedBy=multi-user.target

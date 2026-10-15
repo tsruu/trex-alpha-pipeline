@@ -1,0 +1,18 @@
+[Unit]
+Description=Composite pipeline cycle, hourly (ingest, pool, screen, repack)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=@USER@
+WorkingDirectory=@DIR@
+Environment=TZ=Asia/Kolkata
+ExecStart=/bin/bash scripts/composites/cycle-loop.sh
+# Exits 0 on alphas/composites/STOP-CYCLE (no restart).
+Restart=on-failure
+RestartSec=120
+StandardOutput=append:@DIR@/logs/cycle.out
+StandardError=append:@DIR@/logs/cycle.out
+
+[Install]
+WantedBy=multi-user.target
